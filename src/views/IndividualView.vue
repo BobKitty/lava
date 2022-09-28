@@ -1,5 +1,5 @@
 <template>
-  home page
+  Individual Page
 </template>
 
 <script>

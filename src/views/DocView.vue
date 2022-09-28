@@ -1,5 +1,5 @@
 <template>
-  home page
+  Doc Page
 </template>
 
 <script>

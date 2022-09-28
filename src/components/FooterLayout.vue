@@ -1,5 +1,5 @@
 <template>
-  home page
+  footer
 </template>
 
 <script>

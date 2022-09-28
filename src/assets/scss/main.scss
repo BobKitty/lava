@@ -1,0 +1,102 @@
+@import "variables";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-user-drag: none;
+  outline: none;
+}
+
+html {
+  touch-action: pan-x pan-y;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  overflow-y: scroll;
+  margin: 0;
+  max-width: 100vw;
+  line-height: 1.4;
+  font-size: 14px;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  -ms-scroll-chaining: none;
+  overscroll-behavior: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a, button {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: none;
+}
+
+ol, ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+  font: inherit;
+}
+
+#app {
+  min-height: 400vh;
+}
+
+.btn {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 135%;
+  text-align: center;
+  color: #0e1420;
+  padding: 13px 20px;
+  background-color: transparent;
+  cursor: pointer;
+  box-sizing: border-box;
+  border-radius: 12px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color .2s ease-in-out;
+
+  &.btn-common {
+    border: 1px solid transparent;
+
+    &:hover {
+      background-color: #f4f5f6;
+    }
+
+    &:active {
+      background-color: #e8eaed;
+    }
+  }
+
+  &.btn-outline {
+    border: 1px solid #e8eaed;
+
+    &:hover {
+      background-color: #f4f5f6;
+    }
+
+    &:active {
+      background-color: #e8eaed;
+    }
+  }
+}
+
