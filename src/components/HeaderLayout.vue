@@ -4,7 +4,7 @@
       <div class="content" :class="{small: isBurger}">
         <div class="logo">
           <RouterLink to="/" custom v-slot="{ navigate }">
-            <img alt="LAVA" src="@/assets/img/logo.svg" @click="navigate"/>
+            <img alt="LAVA" src="@/assets/img/walogo.svg" @click="navigate"/>
           </RouterLink>
         </div>
         <transition name="rightSlide">
@@ -82,6 +82,19 @@
                               </span>
                               <span class="menuItemDesc">
                                 для разработчиков
+                              </span>
+                            </div>
+                          </li>
+                        </RouterLink>
+                        <RouterLink to="/invoice" custom v-slot="{ navigate }">
+                          <li class="menuItem" @click="navigate">
+                            <img class="menuItemImage" src="@/assets/img/doc.svg" srcset="@/assets/img/doc1x.svg 1x, @/assets/img/doc2x.svg 2x" alt="" />
+                            <div class="menuItemInfo">
+                              <span class="menuItemLabel">
+                                invoice
+                              </span>
+                              <span class="menuItemDesc">
+                                Пополнить waLAVA-кошелёк
                               </span>
                             </div>
                           </li>
