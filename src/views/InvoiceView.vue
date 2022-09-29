@@ -2,124 +2,82 @@
   <div class="wrapper">
     <div class="invoice_container">
       <div class="invoiceBlock">
-            <div class="payment">
-              <div class="paymentWrapper">
-                <div class="paymentHeader">
-                  <RouterLink to="/" custom v-slot="{ navigate }">
-                    <img alt="LAVA" src="@/assets/img/walogo.svg" @click="navigate" class="paymentLogo"/>
-                  </RouterLink>
-                </div>
-                <div class="paymentTitle">
-                  Пополнить LAVA-кошелёк
-                </div>
-                <div class="services">
-                      <div class="servicesBody">
-                        <div class="servicesLogo">
-                          <img src="@/assets/img/invoice/ps-qiwi.svg" alt="">
-                        </div>
-                        <div>
-                          <span class="serviceTitle">
-                            QIWI
-                          </span>
-                          <br>
-                          <span>
-                            Комиссия 0%
-                          </span>
-                        </div>
-                      </div>
-                      <div class="servicesBody">
-                        <div class="servicesLogo">
-                          <img src="@/assets/img/invoice/ps-card.svg" alt="">
-                        </div>
-                        <div>
-                          <span class="serviceTitle">
-                            Банковская карта
-                          </span>
-                          <br>
-                          <span>
-                            Комиссия 0%
-                          </span>
-                        </div>
-                      </div>
-                      <div class="servicesBody">
-                        <div class="servicesLogo">
-                          <img src="@/assets/img/invoice/ps-sbp.svg" alt="">
-                        </div>
-                        <div>
-                          <span class="serviceTitle">
-                            Система Быстрых Платежей (СБП)
-                          </span>
-                          <br>
-                          <span>
-                            Комиссия 0%
-                          </span>
-                        </div>
-                      </div>
-                      <div class="servicesBody">
-                        <div class="servicesLogo">
-                          <img src="@/assets/img/invoice/ps-lava.svg" alt="">
-                        </div>
-                        <div>
-                          <span class="serviceTitle">
-                            Кошелёк LAVA
-                          </span>
-                          <br>
-                          <span>
-                            Комиссия 0%
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-              </div>
+        <div class="payment">
+          <div class="paymentWrapper">
+            <div class="paymentHeader">
+              <RouterLink to="/" custom v-slot="{ navigate }">
+                <img alt="LAVA" src="@/assets/img/walogo.svg" @click="navigate" class="paymentLogo"/>
+              </RouterLink>
             </div>
-            <div class="invoiceInfo">
-              <div style="height: 100%">
-                <div class="invoiceInfoBody">
-                  <div class="info">
-                    <div class="infoTop">
-                      <div>
-                        К оплате:
-                        <br>
-                        <span class="infoSum">11897,43 ₽</span>
-                      </div>
-                      <div class="infoToggleBtn">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" clip-rule="evenodd" d="M5.2318 9.35984C5.58537 8.93556 6.21593 8.87824 6.64021 9.2318L12 13.6983L17.3598 9.2318C17.7841 8.87824 18.4147 8.93556 18.7682 9.35984C19.1218 9.78412 19.0645 10.4147 18.6402 10.7682L12.6402 15.7682C12.2694 16.0773 11.7307 16.0773 11.3598 15.7682L5.35984 10.7682C4.93556 10.4147 4.87824 9.78412 5.2318 9.35984Z" fill="#252129"></path>
-                        </svg>
-                      </div>
-                    </div>
-                    <div>
-                      <span class="infoTitle">
-                        Назначение перевода
-                      </span>
-                      <br>
-                      <span class="infoComment">
-                        Оплата счета 162413685
-                      </span>
-                    </div>
-                    <div class="infoTitle">
-                      Счёт действителен до  30.09.2022
-                    </div>
-                  </div>
-                  <div class="invoiceBottom">
-                    <div class="help">
-                      Нужна помощь?
-                      <div class="links">
-                        <img src="@/assets/img/invoice/icon-telegram.svg" width="32" alt="telegram-icon">
-                        <img src="@/assets/img/invoice/icon-email.svg" width="32" alt="mail-icon">
-                      </div>
-                    </div>
-                    <div class="offer">
-                      Совершая перевод, вы соглашаетесь
-                      <a target="_blank" href="https://lava.kz/uploads/public_offer.pdf" rel="noreferrer">
-                        с офертой
-                      </a>
-                    </div>
-                  </div>
+            <div class="paymentTitle">
+              Пополнить LAVA-кошелёк
+            </div>
+            <div class="services">
+              <div class="servicesBody" v-for="item in pays" :key="item.id">
+                <div class="servicesLogo">
+                  <img :src="item.img" alt="">
+                </div>
+                <div>
+                  <span class="serviceTitle">
+                    {{item.name}}
+                  </span>
+                  <br>
+                  <span>
+                    Комиссия {{item.fee}}%
+                  </span>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+        <div class="invoiceInfo">
+          <div style="height: 100%">
+            <div class="invoiceInfoBody">
+              <div class="info">
+                <div class="infoTop">
+                  <div>
+                    К оплате:
+                    <br>
+                    <span class="infoSum">11897,43 ₽</span>
+                  </div>
+                  <div class="infoToggleBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M5.2318 9.35984C5.58537 8.93556 6.21593 8.87824 6.64021 9.2318L12 13.6983L17.3598 9.2318C17.7841 8.87824 18.4147 8.93556 18.7682 9.35984C19.1218 9.78412 19.0645 10.4147 18.6402 10.7682L12.6402 15.7682C12.2694 16.0773 11.7307 16.0773 11.3598 15.7682L5.35984 10.7682C4.93556 10.4147 4.87824 9.78412 5.2318 9.35984Z" fill="#252129"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div>
+                  <span class="infoTitle">
+                    Назначение перевода
+                  </span>
+                  <br>
+                  <span class="infoComment">
+                    Оплата счета 162413685
+                  </span>
+                </div>
+                <div class="infoTitle">
+                  Счёт действителен до  30.09.2022
+                </div>
+              </div>
+              <div class="invoiceBottom">
+                <div class="help">
+                  Нужна помощь?
+                  <div class="links">
+                    <img src="@/assets/img/invoice/icon-telegram.svg" width="32" alt="telegram-icon">
+                    <img src="@/assets/img/invoice/icon-email.svg" width="32" alt="mail-icon">
+                  </div>
+                </div>
+                <div class="offer">
+                  Совершая перевод, вы соглашаетесь
+                  <a target="_blank" href="https://lava.kz/uploads/public_offer.pdf" rel="noreferrer">
+                    с офертой
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="invoice_footer">
       <div>
@@ -142,9 +100,7 @@
       </div>
       <div class="languageSelector">
         <div class="languageSelectorWrapper">
-          <div class="langSelector">
 
-          </div>
         </div>
       </div>
     </div>
@@ -152,7 +108,19 @@
 </template>
 
 <script>
-
+export default {
+  data() {
+    return {
+      pays: []
+    }
+  },
+  async mounted() {
+    let res = await fetch('https://public.ecorpay.net/?class=info&method=payways');
+    let json = await res.json();
+    console.log('json', json);
+    this.pays = json.data;
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -493,17 +461,8 @@
 }
 
 .languageSelectorWrapper {
-  display: grid;
-  justify-content: right;
 
-  @media (max-width: 425px) {
-    justify-content: center;
-  }
 }
 
-.langSelectorSelect {
-  border-radius: 50px!important;
-  min-width: 130px!important;
-}
 
 </style>
