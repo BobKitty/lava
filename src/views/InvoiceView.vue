@@ -4,6 +4,9 @@
       <div class="invoiceBlock">
         <div class="payment">
           <div class="paymentWrapper">
+            <button class="backBtn" v-if="isSelectPay" @click="isSelectPay = false">
+              <svg viewBox="64 64 896 896" focusable="false" data-icon="left" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 000 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z"></path></svg>
+            </button>
             <div class="paymentHeader">
               <RouterLink to="/" custom v-slot="{ navigate }">
                 <img alt="LAVA" src="@/assets/img/walogo.svg" @click="navigate" class="paymentLogo"/>
@@ -12,22 +15,47 @@
             <div class="paymentTitle">
               Пополнить LAVA-кошелёк
             </div>
-            <div class="services">
-              <div class="servicesBody" v-for="item in pays" :key="item.id">
-                <div class="servicesLogo">
-                  <img :src="item.img" alt="">
+            <template v-if="orderInfo">
+              <div class="paymentContent" v-if="isSelectPay">
+                <div class="paymentError"></div>
+                <div class="paymentContentTitle">
+                  Введите номер QIWI-кошелька
                 </div>
-                <div>
+                <div class="walletForm">
+                  <vue-tel-input v-model="phone"
+                                 mode="international"
+                                 :inputOptions="{placeholder: 'Введите номер'}"
+                                 styleClasses="container__input"
+                  ></vue-tel-input>
+                </div>
+              </div>
+              <div class="services" :class="{'block': isBlock}" v-else-if="orderInfo.status === 'waiting'">
+                <div class="servicesBody" v-for="item in pays" :key="item.id" @click="sendRequest(item.id)">
+                  <div class="servicesLogo">
+                    <img :src="item.img" alt="">
+                  </div>
+                  <div>
                   <span class="serviceTitle">
                     {{item.name}}
                   </span>
-                  <br>
-                  <span>
+                    <br>
+                    <span>
                     Комиссия {{item.fee}}%
                   </span>
+                  </div>
                 </div>
               </div>
-            </div>
+              <div v-else-if="orderInfo.status === 'rejected'">
+                rejected
+              </div>
+              <div v-else-if="orderInfo.status === 'expired'">
+                expired
+              </div>
+              <div v-else>
+                error
+              </div>
+            </template>
+
           </div>
         </div>
         <div class="invoiceInfo">
@@ -108,17 +136,67 @@
 </template>
 
 <script>
+import { VueTelInput } from 'vue-tel-input';
+import 'vue-tel-input/dist/vue-tel-input.css';
+
 export default {
+  components: {
+    VueTelInput,
+  },
   data() {
     return {
-      pays: []
+      orderInfo: null,
+
+      pays: [],
+      isSelectPay: false,
+
+      phone: null,
+
+      isBlock: true,
     }
   },
   async mounted() {
+
+    let resOrder =  await fetch(`https://public.ecorpay.net/?class=order&method=info&id=${this.$route.params.id}`);
+    let jsonOrder = await resOrder.json();
+
+    if (jsonOrder.success) {
+      this.orderInfo = jsonOrder.data;
+
+      // switch (jsonOrder.status) {
+      //   case 'rejected':
+      //
+      //     break;
+      //   case 'error':
+      //
+      //     break;
+      //   case 'expired':
+      //
+      //     break;
+      // }
+    }
+
     let res = await fetch('https://public.ecorpay.net/?class=info&method=payways');
     let json = await res.json();
     console.log('json', json);
     this.pays = json.data;
+  },
+  methods: {
+    selectPay() {
+      this.isSelectPay = true;
+    },
+
+    async sendRequest(id) {
+      let res = await fetch('https://public.ecorpay.net/?class=order&method=link&hash=d2d724807a140c3daa737de866191b45&payway=' + id);
+      let json = await res.json();
+      console.log('json', json);
+
+      if (json.success) {
+        window.location.href = json.url;
+      } else {
+        alert(json.error)
+      }
+    }
   }
 }
 </script>
@@ -183,10 +261,38 @@ export default {
 }
 
 .paymentWrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 370px;
   transition: .25s;
+}
+
+.backBtn {
+  position: absolute;
+  left: -48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  width: 32px;
+  min-width: 32px;
+  padding-left: 0;
+  padding-right: 0;
+  border: none;
+  border-radius: 50%;
+  box-shadow: var(--Box_Shadow_Elevation_1_Bordered);
+  font-size: 16px;
+  color: rgba(0,0,0,.85);
+  cursor: pointer;
+  transition: all .3s cubic-bezier(.645,.045,.355,1);
+  user-select: none;
+  background: #fff;
+
+  &:hover {
+    border-color: #40a9ff;
+    color: #40a9ff;
+  }
 }
 
 .paymentHeader {
@@ -241,10 +347,64 @@ export default {
   }
 }
 
+.paymentContent {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.paymentContentTitle {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  margin: 0 0 32px 0;
+  text-align: center;
+
+  @media only screen and (max-width: 824px) {
+    font-size: 18px;
+  }
+
+  @media only screen and (max-width: 375px) {
+    font-size: 16px;
+  }
+}
+
+.paymentError {
+  text-align: center;
+  color: red;
+}
+
+.walletForm {
+  grid-gap: 24px;
+  display: grid;
+  gap: 24px;
+  text-align: center;
+}
+
+.container__input {
+  margin-bottom: 12px;
+  padding: 16px 11px 16px 0;
+  width: 100%;
+  background-color: var(--PA_Surface_Tinted);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: var(--PA_Text_Primary);
+  font-size: 16px;
+  transition: box-shadow .25s ease, border-color .25s ease;
+
+  &:active,
+  &:hover,
+  &:focus-within {
+    border-color: var(--PAA_Brand_Primary);
+  }
+}
+
 .services {
+  position: relative;
   grid-gap: 16px;
   display: grid;
   gap: 16px;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .servicesBody {
@@ -458,10 +618,6 @@ export default {
   @media only screen and (max-width: 768px) {
     justify-self: center;
   }
-}
-
-.languageSelectorWrapper {
-
 }
 
 

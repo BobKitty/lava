@@ -23,7 +23,7 @@ const router = createRouter({
       component: DocView
     },
     {
-      path: '/invoice',
+      path: '/invoice/:id',
       name: 'invoice',
       component: InvoiceView
     },
